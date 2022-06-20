@@ -43,5 +43,18 @@ public class Users {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @GetMapping("/verifyAccount")
+  public ResponseEntity verifyAccount(@RequestParam("username") String username, @RequestParam("email") String email) {
+    User user = userInterface.findByName(username);
+    if (user != null) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Username is already taken");
+    }
+    user = userInterface.findByEmail(email);
+    if (user != null) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Email has an account");
+    }
+    return ResponseEntity.status(200).body("You're big chillin");
+  }
   
 }

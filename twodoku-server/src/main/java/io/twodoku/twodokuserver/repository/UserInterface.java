@@ -6,4 +6,5 @@ import io.twodoku.twodokuserver.models.User;
 
 public interface UserInterface extends JpaRepository<User, Long> {
   User findByName(String name);
+  User findByEmail(String email);
 }
