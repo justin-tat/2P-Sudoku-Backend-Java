@@ -2,8 +2,14 @@ package io.twodoku.twodokuserver.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import io.twodoku.twodokuserver.models.Game;
 import io.twodoku.twodokuserver.models.User;
+import io.twodoku.twodokuserver.repository.GameInterface;
 import io.twodoku.twodokuserver.repository.UserInterface;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +24,8 @@ public class Users {
 
   @Autowired
   UserInterface userInterface;
+  @Autowired
+  GameInterface gameInterface;
   
   @GetMapping(value="/")
   public String getUsers() {
@@ -55,6 +63,14 @@ public class Users {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("Email has an account");
     }
     return ResponseEntity.status(200).body("You're big chillin");
+  }
+
+  @GetMapping("/gameHistory")
+  public ResponseEntity getGameHistory(@RequestParam("userId") Integer userId, @RequestParam("username") String username) {
+    List<Game> user = gameInterface.findByP1IdOrP2Id(userId, userId);
+    return new ResponseEntity<>(user, HttpStatus.OK);
+    //return ResponseEntity.status(HttpStatus.CONFLICT).body("Testing");
+
   }
   
 }
