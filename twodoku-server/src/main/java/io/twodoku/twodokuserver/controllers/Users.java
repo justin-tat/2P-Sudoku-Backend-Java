@@ -7,6 +7,7 @@ import io.twodoku.twodokuserver.models.User;
 import io.twodoku.twodokuserver.repository.GameInterface;
 import io.twodoku.twodokuserver.repository.UserInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,8 +68,12 @@ public class Users {
 
   @GetMapping("/gameHistory")
   public ResponseEntity getGameHistory(@RequestParam("userId") Integer userId, @RequestParam("username") String username) {
-    List<Game> user = gameInterface.findByP1IdOrP2Id(userId, userId);
-    return new ResponseEntity<>(user, HttpStatus.OK);
+    List<Game> games = gameInterface.findByP1IdOrP2Id( userId, userId);
+    List<Game> orderedGames = gameInterface.findByP1IdOrP2IdOrderByTimeDesc(userId, userId);
+
+
+    return new ResponseEntity<>(orderedGames, HttpStatus.OK);
+
     //return ResponseEntity.status(HttpStatus.CONFLICT).body("Testing");
 
   }
