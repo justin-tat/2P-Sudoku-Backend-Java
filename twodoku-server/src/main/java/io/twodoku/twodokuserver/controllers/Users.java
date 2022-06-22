@@ -7,10 +7,14 @@ import io.twodoku.twodokuserver.models.User;
 import io.twodoku.twodokuserver.repository.GameInterface;
 import io.twodoku.twodokuserver.repository.UserInterface;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,11 +72,25 @@ public class Users {
 
   @GetMapping("/gameHistory")
   public ResponseEntity getGameHistory(@RequestParam("userId") Integer userId, @RequestParam("username") String username) {
-    List<Game> games = gameInterface.findByP1IdOrP2Id( userId, userId);
+
     List<Game> orderedGames = gameInterface.findByP1IdOrP2IdOrderByTimeDesc(userId, userId);
+    List<HashMap<String, Object>> parsedGames = new ArrayList<>();
+    PrettyTime p = new PrettyTime();
+    for (Game game : orderedGames) {
+      String opponentName = game.getP1_id() == userId ? game.getP2_name() : game.getP1_name();
+      int opponentRating = game.getP1_id() == userId ? game.getP2_rating() : game.getP1_rating();
+      int winningId = game.getIs_finished().equals(game.getP1_name()) ? game.getP1_id() : game.getP2_id();
+      boolean didWin = winningId == userId ? true : false;
+      String gameTime = p.format(new Date(game.getTime().toInstant().toEpochMilli()));
+      HashMap<String, Object> formattedGame = new HashMap<>();
+      formattedGame.put("opponent", opponentName);
+      formattedGame.put("date", gameTime);
+      formattedGame.put("opponentRating", opponentRating);
+      formattedGame.put("win", didWin);
+      parsedGames.add(formattedGame);
+    }
 
-
-    return new ResponseEntity<>(orderedGames, HttpStatus.OK);
+    return new ResponseEntity<>(parsedGames, HttpStatus.OK);
 
     //return ResponseEntity.status(HttpStatus.CONFLICT).body("Testing");
 

@@ -56,6 +56,12 @@
      <artifactId>spring-data-jpa</artifactId>
      <version>2.1.10.RELEASE</version>
    </dependency>
+
+	 <dependency>
+		<groupId>org.ocpsoft.prettytime</groupId>
+		<artifactId>prettytime</artifactId>
+		<version>5.0.2.Final</version>
+ </dependency>
  </dependencies>
 
 	<build>
