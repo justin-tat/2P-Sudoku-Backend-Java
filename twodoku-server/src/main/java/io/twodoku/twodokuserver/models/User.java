@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class User {
   @Id
   @Column(name="id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @Column(name="name")
   private String name;
@@ -15,17 +16,23 @@ public class User {
   @Column(name="password")
   private String password;
   @Column(name="rating")
-  private int rating;
+  private int rating = 1000;
   @Column(name="difficulty")
-  private String difficulty;
+  private String difficulty = "easy";
   @Column(name="board_id")
-  private long board_id;
+  private long board_id = 0;
   @Column(name="game_id")
-  private long game_id;
+  private long game_id = 0;
   @Column(name="games_played")
-  private long games_played;
+  private long games_played = 0;
   @Column(name="highest_rating")
-  private int highest_rating;
+  private int highest_rating = 1000;
+
+  public User(String name, String email, String password) {
+    this.name = name;
+    this.email = email;
+    this.password = password;
+  }
 
   public User() {}
 

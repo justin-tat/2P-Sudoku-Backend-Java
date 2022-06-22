@@ -2,11 +2,13 @@ package io.twodoku.twodokuserver.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import io.twodoku.twodokuserver.models.BodyParams;
 import io.twodoku.twodokuserver.models.Game;
 import io.twodoku.twodokuserver.models.User;
 import io.twodoku.twodokuserver.repository.GameInterface;
 import io.twodoku.twodokuserver.repository.UserInterface;
 
+import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,8 +19,11 @@ import java.util.Optional;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -94,6 +99,24 @@ public class Users {
 
     //return ResponseEntity.status(HttpStatus.CONFLICT).body("Testing");
 
+  }
+
+  @PostMapping(
+    value = "/makeAccount",
+    consumes = {MediaType.APPLICATION_JSON_VALUE},
+    produces = {MediaType.APPLICATION_JSON_VALUE}
+  )
+  public ResponseEntity makeAccount(@RequestBody BodyParams bodyParams) {
+    try{
+      HashMap<String, Object> params = bodyParams.getParams();
+      String username = params.get("username").toString();
+      String password = params.get("password").toString();
+      String email = params.get("email").toString();
+      userInterface.save(new User(username, email, password));
+      return ResponseEntity.status(200).body("Successfully made account");
+    } catch(Exception e) {
+      return ResponseEntity.status(500).body("Server errored while making account");
+    }
   }
   
 }
