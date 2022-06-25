@@ -49,31 +49,15 @@ public class Games {
     //ids in order: id, p1_id, p2_id
     List<Object> ids = gameInterface.getIdsAfterInserting((Integer) playerOne.get("id"), (Integer) playerTwo.get("id"),(String) playerOne.get("name"), (String) playerTwo.get("name"), (Integer) playerOne.get("rating"), (Integer) playerTwo.get("rating"));
     ScriptEngine graalEngine = new ScriptEngineManager().getEngineByName("graal.js");
-    System.out.println(Games.class.getResource("jsResources/generateBoard.js").toURI());
     Path jsPath = Paths.get(Games.class.getResource("jsResources/generateBoard.js").toURI());
     try (BufferedReader reader = Files.newBufferedReader(jsPath);){
-      //ScriptEngineManager manager = new ScriptEngineManager();
-      //ScriptEngine engine = manager.getEngineByName("JavaScript");
-
-      //NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
-      //ScriptEngine engine = factory.getScriptEngine("--language=es6");
-      //String filePath = "twodoku-server/src/main/java/io/twodoku/twodokuserver/jsResources/generateBoard.js";
-      //File file = new File(filePath);
-      System.out.println("Just created file with filePath " + jsPath);
-      
-      //Invocable inv = (Invocable) engine;
-      //engine.eval(Files.newBufferedReader(file.getAbsolutePath()));
-      System.out.println("Created reader: ");
-      System.out.println("graalEngine: " + graalEngine);
       graalEngine.eval(reader);
       System.out.println("Evaluated the file using graalEngine");
       Invocable inv = (Invocable) graalEngine;
       
       System.out.println(inv.invokeFunction("found"));
-      System.out.println("Evaluated the file");
     } catch(Exception e) {
       System.out.println("Error when calling js function: " + e);
-      System.out.println(e);
     }
     return ResponseEntity.status(200).body(ids);
   }
