@@ -24,9 +24,9 @@ public class Game {
   @Column(name="p2_rating")
   private int p2_rating;
   @Column(name="time")
-  private OffsetDateTime time;
+  private OffsetDateTime time = OffsetDateTime.now();
   @Column(name="is_finished")
-  private String is_finished;
+  private String is_finished = "";
 
   public Game() {}
 
@@ -41,6 +41,15 @@ public class Game {
     this.p2_rating = p2_rating;
     this.time = time;
     this.is_finished = is_finished;
+  }
+
+  public Game(int p1Id, int p2Id, String p1_name, String p2_name, int p1_rating, int p2_rating) {
+    this.p1Id = p1Id;
+    this.p2Id = p2Id;
+    this.p1_name = p1_name;
+    this.p2_name = p2_name;
+    this.p1_rating = p1_rating;
+    this.p2_rating = p2_rating;
   }
 
   public Integer getId() {
