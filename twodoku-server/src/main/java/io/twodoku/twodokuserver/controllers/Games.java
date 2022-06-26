@@ -27,6 +27,7 @@ import org.graalvm.polyglot.*;
 import io.twodoku.twodokuserver.repository.UserInterface;
 import io.twodoku.twodokuserver.models.BodyParams;
 import io.twodoku.twodokuserver.models.Game;
+import io.twodoku.twodokuserver.models.PostGameIds;
 import io.twodoku.twodokuserver.repository.GameInterface;
 
 @RestController
@@ -46,25 +47,30 @@ public class Games {
     HashMap<String, Object> params = bodyParams.getParams();
     HashMap<String, Object> playerOne = (HashMap<String, Object>) params.get("playerOne");
     HashMap<String, Object> playerTwo = (HashMap<String, Object>) params.get("playerTwo");
-    String name = (String) playerOne.get("name");
-    System.out.println("name: " + name);
     //ids in order: id, p1_id, p2_id
-    List<Object> ids = gameInterface.getIdsAfterInserting((Integer) playerOne.get("id"), (Integer) playerTwo.get("id"),(String) playerOne.get("name"), (String) playerTwo.get("name"), (Integer) playerOne.get("rating"), (Integer) playerTwo.get("rating"));
+    //List<Integer> ids = gameInterface.getIdsAfterInserting((Integer) playerOne.get("id"), (Integer) playerTwo.get("id"),(String) playerOne.get("name"), (String) playerTwo.get("name"), (Integer) playerOne.get("rating"), (Integer) playerTwo.get("rating"));
+    List<PostGameIds> ids = gameInterface.getIdsAfterInserting((Integer) playerOne.get("id"), (Integer) playerTwo.get("id"),(String) playerOne.get("name"), (String) playerTwo.get("name"), (Integer) playerOne.get("rating"), (Integer) playerTwo.get("rating"));
+    
     ScriptEngine graalEngine = new ScriptEngineManager().getEngineByName("graal.js");
     Path jsPath = Paths.get(Games.class.getResource("jsResources/generateBoard.js").toURI());
+    Invocable inv;
+    Map<String, Object> board = null;
     try (BufferedReader reader = Files.newBufferedReader(jsPath);){
       graalEngine.eval(reader);
       System.out.println("Evaluated the file using graalEngine");
-      Invocable inv = (Invocable) graalEngine;
+      inv = (Invocable) graalEngine;
       
       System.out.println(inv.invokeFunction("found"));
-      Map<String, Object> board = (Map<String, Object>) inv.invokeFunction("generateUniqueBoard", 1);
-      System.out.println("board.get('0'): " + board.get("0"));
-      System.out.println("board.get('1'): " + board.get("1"));
-      System.out.println("board.get('2'): " + board.get("2"));
+      board = (Map<String, Object>) inv.invokeFunction("generateUniqueBoard", 1);
     } catch(Exception e) {
       System.out.println("Error when calling js function: " + e);
     }
+    String removedColumns = board.get("0").toString();
+    String boardState = board.get("1").toString();
+    String boardSolution = board.get("2").toString();
+    HashMap<String, Object> p1 = new HashMap<String, Object>();
+    System.out.print(ids.get(0).getId());
+    //p1.put("gameId", )
     return ResponseEntity.status(200).body(ids);
   }
 }
