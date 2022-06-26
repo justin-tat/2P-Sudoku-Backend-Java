@@ -58,37 +58,21 @@ public class Games {
     try (BufferedReader reader = Files.newBufferedReader(jsPath);){
       graalEngine.eval(reader);
       inv = (Invocable) graalEngine;
-      
-      System.out.println(inv.invokeFunction("found"));
       board = (Map<String, Object>) inv.invokeFunction("generateUniqueBoard", 1);
     } catch(Exception e) {
       System.out.println("Error when calling js function: " + e);
     }
     String removedColumns = board.get("0").toString();
-    String boardState = board.get("1").toString().replaceAll("\\s+", "");
-    String boardSolution = board.get("2").toString().replaceAll("\\s+", "");
-    System.out.println("boardSolution: " + boardSolution.length());
-    System.out.println("boardState: " + boardState.length());
-    // HashMap<String, Object> p1 = new HashMap<String, Object>();
-    // p1.put("gameId", ids.get(0).getId());
-    // p1.put("playerId", ids.get(0).getP1_id());
-    // p1.put("boardState", boardState);
-    // p1.put("boardSolution", boardSolution);
-    // p1.put("answerableCells", boardState);
-    // p1.put("holes", 1);
-    // HashMap<String, Object> p2 = new HashMap<String, Object>();
-    // p2.put("gameId", ids.get(0).getId());
-    // p2.put("playerId", ids.get(0).getP2_id());
-    // p2.put("boardState", boardState);
-    // p2.put("boardSolution", boardSolution);
-    // p2.put("answerableCells", boardState);
-    // p2.put("holes", 1);
-
-
-
+    System.out.println("boardState: " + board.get("1").toString().replaceAll("\\s+", "").split("\\)")[1]);
+    String boardState = board.get("1").toString().replaceAll("\\s+", "").split("\\)")[1];
+    String boardSolution = board.get("2").toString().replaceAll("\\s+", "").split("\\)")[1];
     List<MadeBoard> p1_info = gameInterface.makeBoard(ids.get(0).getP1_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
     List<MadeBoard> p2_info = gameInterface.makeBoard(ids.get(0).getP2_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
-    System.out.println("p1_info: " + p1_info.get(0).getBoardState());
-    return ResponseEntity.status(200).body(ids);
+    Map<String, Object> toUsers = new HashMap<>();
+    toUsers.put("boardState", boardState);
+    toUsers.put("boardSolution", boardSolution);
+    toUsers.put("holes", 1);
+    toUsers.put("game_id", ids.get(0).getId());
+    return ResponseEntity.status(200).body(toUsers);
   }
 }
