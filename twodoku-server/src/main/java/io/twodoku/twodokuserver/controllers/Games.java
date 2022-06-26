@@ -27,6 +27,7 @@ import org.graalvm.polyglot.*;
 import io.twodoku.twodokuserver.repository.UserInterface;
 import io.twodoku.twodokuserver.models.BodyParams;
 import io.twodoku.twodokuserver.models.Game;
+import io.twodoku.twodokuserver.models.MadeBoard;
 import io.twodoku.twodokuserver.models.PostGameIds;
 import io.twodoku.twodokuserver.repository.GameInterface;
 
@@ -48,7 +49,6 @@ public class Games {
     HashMap<String, Object> playerOne = (HashMap<String, Object>) params.get("playerOne");
     HashMap<String, Object> playerTwo = (HashMap<String, Object>) params.get("playerTwo");
     //ids in order: id, p1_id, p2_id
-    //List<Integer> ids = gameInterface.getIdsAfterInserting((Integer) playerOne.get("id"), (Integer) playerTwo.get("id"),(String) playerOne.get("name"), (String) playerTwo.get("name"), (Integer) playerOne.get("rating"), (Integer) playerTwo.get("rating"));
     List<PostGameIds> ids = gameInterface.getIdsAfterInserting((Integer) playerOne.get("id"), (Integer) playerTwo.get("id"),(String) playerOne.get("name"), (String) playerTwo.get("name"), (Integer) playerOne.get("rating"), (Integer) playerTwo.get("rating"));
     
     ScriptEngine graalEngine = new ScriptEngineManager().getEngineByName("graal.js");
@@ -57,7 +57,6 @@ public class Games {
     Map<String, Object> board = null;
     try (BufferedReader reader = Files.newBufferedReader(jsPath);){
       graalEngine.eval(reader);
-      System.out.println("Evaluated the file using graalEngine");
       inv = (Invocable) graalEngine;
       
       System.out.println(inv.invokeFunction("found"));
@@ -66,11 +65,30 @@ public class Games {
       System.out.println("Error when calling js function: " + e);
     }
     String removedColumns = board.get("0").toString();
-    String boardState = board.get("1").toString();
-    String boardSolution = board.get("2").toString();
-    HashMap<String, Object> p1 = new HashMap<String, Object>();
-    System.out.print(ids.get(0).getId());
-    //p1.put("gameId", )
+    String boardState = board.get("1").toString().replaceAll("\\s+", "");
+    String boardSolution = board.get("2").toString().replaceAll("\\s+", "");
+    System.out.println("boardSolution: " + boardSolution.length());
+    System.out.println("boardState: " + boardState.length());
+    // HashMap<String, Object> p1 = new HashMap<String, Object>();
+    // p1.put("gameId", ids.get(0).getId());
+    // p1.put("playerId", ids.get(0).getP1_id());
+    // p1.put("boardState", boardState);
+    // p1.put("boardSolution", boardSolution);
+    // p1.put("answerableCells", boardState);
+    // p1.put("holes", 1);
+    // HashMap<String, Object> p2 = new HashMap<String, Object>();
+    // p2.put("gameId", ids.get(0).getId());
+    // p2.put("playerId", ids.get(0).getP2_id());
+    // p2.put("boardState", boardState);
+    // p2.put("boardSolution", boardSolution);
+    // p2.put("answerableCells", boardState);
+    // p2.put("holes", 1);
+
+
+
+    List<MadeBoard> p1_info = gameInterface.makeBoard(ids.get(0).getP1_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
+    List<MadeBoard> p2_info = gameInterface.makeBoard(ids.get(0).getP2_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
+    System.out.println("p1_info: " + p1_info.get(0).getBoardState());
     return ResponseEntity.status(200).body(ids);
   }
 }
