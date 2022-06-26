@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.script.*;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.graalvm.polyglot.*;
 
 import io.twodoku.twodokuserver.repository.UserInterface;
 import io.twodoku.twodokuserver.models.BodyParams;
@@ -56,6 +58,10 @@ public class Games {
       Invocable inv = (Invocable) graalEngine;
       
       System.out.println(inv.invokeFunction("found"));
+      Map<String, Object> board = (Map<String, Object>) inv.invokeFunction("generateUniqueBoard", 1);
+      System.out.println("board.get('0'): " + board.get("0"));
+      System.out.println("board.get('1'): " + board.get("1"));
+      System.out.println("board.get('2'): " + board.get("2"));
     } catch(Exception e) {
       System.out.println("Error when calling js function: " + e);
     }

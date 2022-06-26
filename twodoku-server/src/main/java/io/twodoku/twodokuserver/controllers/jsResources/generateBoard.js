@@ -257,7 +257,7 @@ function generateUniqueBoard (numHoles) {
     var test = newStartingBoard(numHoles);
   }
   while (multiplePossibleSolutions(test[1]) === true);
-  return test;
+  return {"0": test[0], "1": test[1], "2": test[2]};
 }
 
 function found () {
