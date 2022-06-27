@@ -62,12 +62,16 @@ public class Games {
     } catch(Exception e) {
       System.out.println("Error when calling js function: " + e);
     }
+    
     String removedColumns = board.get("0").toString();
-    System.out.println("boardState: " + board.get("1").toString().replaceAll("\\s+", "").split("\\)")[1]);
     String boardState = board.get("1").toString().replaceAll("\\s+", "").split("\\)")[1];
     String boardSolution = board.get("2").toString().replaceAll("\\s+", "").split("\\)")[1];
     List<MadeBoard> p1_info = gameInterface.makeBoard(ids.get(0).getP1_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
     List<MadeBoard> p2_info = gameInterface.makeBoard(ids.get(0).getP2_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
+
+    //UpdateUserBoard
+    gameInterface.updateUserBoards(p1_info.get(0).getId(), ids.get(0).getId(), p1_info.get(0).getPlayerId());
+    gameInterface.updateUserBoards(p2_info.get(0).getId(), ids.get(0).getId(), p2_info.get(0).getPlayerId());
     Map<String, Object> toUsers = new HashMap<>();
     toUsers.put("boardState", boardState);
     toUsers.put("boardSolution", boardSolution);
