@@ -12,23 +12,29 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.script.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.graalvm.polyglot.*;
 
 import io.twodoku.twodokuserver.repository.UserInterface;
+import io.twodoku.twodokuserver.models.Board;
 import io.twodoku.twodokuserver.models.BodyParams;
 import io.twodoku.twodokuserver.models.Game;
 import io.twodoku.twodokuserver.models.MadeBoard;
 import io.twodoku.twodokuserver.models.PostGameIds;
+import io.twodoku.twodokuserver.repository.BoardInterface;
 import io.twodoku.twodokuserver.repository.GameInterface;
 
 @RestController
@@ -38,6 +44,8 @@ public class Games {
   UserInterface userInterface;
   @Autowired
   GameInterface gameInterface;
+  @Autowired
+  BoardInterface boardInterface;
 
   @PostMapping(
     value = "/makeGame",
@@ -79,4 +87,25 @@ public class Games {
     toUsers.put("game_id", ids.get(0).getId());
     return ResponseEntity.status(200).body(toUsers);
   }
+
+  @GetMapping("/getGame")
+  public ResponseEntity getGame(@RequestParam("boardId") int boardId) {
+    Board board = boardInterface.findById(boardId).get();
+    System.out.println("board: " + board);
+    return ResponseEntity.status(200).body(board);
+  }
+
+  // @PutMapping("/updateGame")
+  // public ResponseEntity updateGame(@RequestBody BodyParams bodyParams) {
+  //   HashMap<String, Object> params = bodyParams.getParams();
+  //   System.out.println(params.toString());
+  //   return ResponseEntity.status(500).body("Testing update Game");
+  // }
+
+  // @PutMapping("/finishGame")
+  // public ResponseEntity finishGame(@RequestBody BodyParams bodyParams) {
+  //   HashMap<String, Object> params = bodyParams.getParams();
+  //   return ResponseEntity.status(500).body("Testing finish Game");
+  // }
+  
 }
