@@ -28,6 +28,8 @@ public class Board {
   @Column(name="answerable_cells")
   private String answerableCells = "";
 
+
+
   public Board(Integer id, int playerId, int gameId, int holes, short playerMistakes, String boardState,
       String boardSolution, OffsetDateTime time, String answerableCells) {
     this.id = id;
@@ -43,8 +45,33 @@ public class Board {
 
   Board() {}
 
+  public Integer getId() {
+    return id;
+  }
+
   public int getPlayerId() {
     return playerId;
+  }
+  public int getGameId() {
+    return gameId;
+  }
+  public OffsetDateTime getGameTime() {
+    return gameTime;
+  }
+  public int getHoles() {
+    return holes;
+  }
+  public short getPlayerMistakes() {
+    return playerMistakes;
+  }
+  public String getBoardState() {
+    return boardState;
+  }
+  public String getBoardSolution() {
+    return boardSolution;
+  }
+  public String getAnswerableCells() {
+    return answerableCells;
   }
 
   

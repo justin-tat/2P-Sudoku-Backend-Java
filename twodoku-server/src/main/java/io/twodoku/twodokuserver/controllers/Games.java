@@ -74,12 +74,12 @@ public class Games {
     String removedColumns = board.get("0").toString();
     String boardState = board.get("1").toString().replaceAll("\\s+", "").split("\\)")[1];
     String boardSolution = board.get("2").toString().replaceAll("\\s+", "").split("\\)")[1];
-    List<MadeBoard> p1_info = gameInterface.makeBoard(ids.get(0).getP1_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
-    List<MadeBoard> p2_info = gameInterface.makeBoard(ids.get(0).getP2_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
+    List<MadeBoard> p1_info = boardInterface.makeBoard(ids.get(0).getP1_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
+    List<MadeBoard> p2_info = boardInterface.makeBoard(ids.get(0).getP2_id(), ids.get(0).getId(), boardState, boardSolution, boardState, 1);
 
     //UpdateUserBoard
-    gameInterface.updateUserBoards(p1_info.get(0).getId(), ids.get(0).getId(), p1_info.get(0).getPlayerId());
-    gameInterface.updateUserBoards(p2_info.get(0).getId(), ids.get(0).getId(), p2_info.get(0).getPlayerId());
+    userInterface.updateUserBoards(p1_info.get(0).getId(), ids.get(0).getId(), p1_info.get(0).getPlayerId());
+    userInterface.updateUserBoards(p2_info.get(0).getId(), ids.get(0).getId(), p2_info.get(0).getPlayerId());
     Map<String, Object> toUsers = new HashMap<>();
     toUsers.put("boardState", boardState);
     toUsers.put("boardSolution", boardSolution);
@@ -90,8 +90,14 @@ public class Games {
 
   @GetMapping("/getGame")
   public ResponseEntity getGame(@RequestParam("boardId") int boardId) {
+    //63
     Board board = boardInterface.findById(boardId).get();
-    System.out.println("board: " + board);
+    String isFinished = gameInterface.findById(board.getGameId()).get().getIs_finished();
+    if (isFinished.length() != 0) {
+
+      return ResponseEntity.status(200).body("You lost");
+    }
+
     return ResponseEntity.status(200).body(board);
   }
 
