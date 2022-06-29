@@ -96,17 +96,27 @@ public class Games {
       userInterface.updateUserIds(userId);
       return ResponseEntity.status(200).body("You lost");
     }
-
-    System.out.println("board: " + board);
     return ResponseEntity.status(200).body(board);
   }
 
-  // @PutMapping("/updateGame")
-  // public ResponseEntity updateGame(@RequestBody BodyParams bodyParams) {
-  //   HashMap<String, Object> params = bodyParams.getParams();
-  //   System.out.println(params.toString());
-  //   return ResponseEntity.status(500).body("Testing update Game");
-  // }
+  @PutMapping(
+    value = "/updateGame",
+    consumes = {MediaType.APPLICATION_JSON_VALUE},
+    produces = {MediaType.APPLICATION_JSON_VALUE}
+  )
+  public ResponseEntity updateGame(@RequestBody BodyParams bodyParams) {
+    HashMap<String, Object> params = bodyParams.getParams();
+    //System.out.println(params.toString());
+    String board = params.get("boardState").toString().replaceAll("\\s+", "");
+    HashMap<Integer, Boolean> incorrectTiles = (HashMap<Integer, Boolean>)params.get("incorrectTiles");
+    // System.out.println("incorrectTiles.toString(): " + incorrectTiles.toString());
+    // System.out.println("incorrectTiles.keySet().size(): " + incorrectTiles.keySet().size());
+    int boardId = Integer.parseInt((String) params.get("boardId"));
+    System.out.println("boardId: " + boardId);
+    System.out.println("board: " + board);
+    boardInterface.updateBoardState(board, incorrectTiles.keySet().size(), boardId);
+    return ResponseEntity.status(500).body("Successfully updated Game");
+  }
 
   // @PutMapping("/finishGame")
   // public ResponseEntity finishGame(@RequestBody BodyParams bodyParams) {
