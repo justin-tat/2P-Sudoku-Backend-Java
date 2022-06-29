@@ -14,19 +14,19 @@ public class Board {
   @Column(name="player_id")
   private int playerId;
   @Column(name="game_id")
-  private int gameId;
+  private int game_id;
   @Column(name="gametime")
-  private OffsetDateTime gameTime = OffsetDateTime.now();
+  private OffsetDateTime gametime = OffsetDateTime.now();
   @Column(name="holes")
   private int holes = 0;
   @Column(name="player_mistakes")
-  private short playerMistakes = 0;
+  private short player_mistakes = 0;
   @Column(name="board_state")
-  private String boardState;
+  private String board_state;
   @Column(name="board_solution")
-  private String boardSolution;
+  private String board_solution;
   @Column(name="answerable_cells")
-  private String answerableCells = "";
+  private String answerable_cells = "";
 
 
 
@@ -34,13 +34,13 @@ public class Board {
       String boardSolution, OffsetDateTime time, String answerableCells) {
     this.id = id;
     this.playerId = playerId;
-    this.gameId = gameId;
+    this.game_id = gameId;
     this.holes = holes;
-    this.playerMistakes = playerMistakes;
-    this.boardState = boardState;
-    this.boardSolution = boardSolution;
-    this.gameTime = time;
-    this.answerableCells = answerableCells;
+    this.player_mistakes = playerMistakes;
+    this.board_state = boardState;
+    this.board_solution = boardSolution;
+    this.gametime = time;
+    this.answerable_cells = answerableCells;
   }
 
   Board() {}
@@ -49,29 +49,29 @@ public class Board {
     return id;
   }
 
-  public int getPlayerId() {
+  public int getPlayer_id() {
     return playerId;
   }
-  public int getGameId() {
-    return gameId;
+  public int getGame_id() {
+    return game_id;
   }
-  public OffsetDateTime getGameTime() {
-    return gameTime;
+  public OffsetDateTime getGametime() {
+    return gametime;
   }
   public int getHoles() {
     return holes;
   }
-  public short getPlayerMistakes() {
-    return playerMistakes;
+  public short getPlayer_mistakes() {
+    return player_mistakes;
   }
-  public String getBoardState() {
-    return boardState;
+  public String getBoard_state() {
+    return board_state;
   }
-  public String getBoardSolution() {
-    return boardSolution;
+  public String getBoard_solution() {
+    return board_solution;
   }
-  public String getAnswerableCells() {
-    return answerableCells;
+  public String getAnswerable_cells() {
+    return answerable_cells;
   }
 
   

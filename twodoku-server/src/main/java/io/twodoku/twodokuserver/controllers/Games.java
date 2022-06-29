@@ -89,15 +89,15 @@ public class Games {
   }
 
   @GetMapping("/getGame")
-  public ResponseEntity getGame(@RequestParam("boardId") int boardId) {
-    //63
+  public ResponseEntity getGame(@RequestParam("boardId") int boardId, @RequestParam("userId") int userId) {
     Board board = boardInterface.findById(boardId).get();
-    String isFinished = gameInterface.findById(board.getGameId()).get().getIs_finished();
+    String isFinished = gameInterface.findById(board.getGame_id()).get().getIs_finished();
     if (isFinished.length() != 0) {
-
+      userInterface.updateUserIds(userId);
       return ResponseEntity.status(200).body("You lost");
     }
 
+    System.out.println("board: " + board);
     return ResponseEntity.status(200).body(board);
   }
 

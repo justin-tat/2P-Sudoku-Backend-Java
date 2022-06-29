@@ -17,4 +17,10 @@ public interface UserInterface extends JpaRepository<User, Integer> {
   nativeQuery = true)
   @Transactional
   void updateUserBoards (@Param("boardId") int boardId,@Param("gameId") int gameId, @Param("playerId") int playerId);
+
+  @Modifying
+  @Query(value = "UPDATE users SET board_id = 0, game_id = 0 WHERE id = :playerId",
+  nativeQuery = true)
+  @Transactional
+  void updateUserIds (@Param("playerId") int playerId);
 }
