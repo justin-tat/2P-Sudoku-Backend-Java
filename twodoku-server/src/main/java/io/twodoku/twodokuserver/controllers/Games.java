@@ -35,6 +35,7 @@ import io.twodoku.twodokuserver.models.boardModels.MadeBoard;
 import io.twodoku.twodokuserver.models.gameModels.FindUserIds;
 import io.twodoku.twodokuserver.models.gameModels.Game;
 import io.twodoku.twodokuserver.models.gameModels.PostGameIds;
+import io.twodoku.twodokuserver.models.userModels.UserStats;
 import io.twodoku.twodokuserver.repository.BoardInterface;
 import io.twodoku.twodokuserver.repository.GameInterface;
 
@@ -123,7 +124,14 @@ public class Games {
     HashMap<String, Object> params = bodyParams.getParams();
     int boardId = Integer.parseInt((String) params.get("boardId"));
     int gameId = Integer.parseInt((String) params.get("gameId"));
-    List<FindUserIds> userIds = gameInterface.findUserIds(gameId);
+    //pr1
+    FindUserIds userIds = gameInterface.findUserIds(gameId);
+    //pr2
+    UserStats p1Stats = userInterface.getUserStats(userIds.getP1_id());
+    UserStats p2Stats = userInterface.getUserStats(userIds.getP2_id());
+    //pr3
+    boolean isFinished = gameInterface.getIs_finished(gameId);
+    
 
     return ResponseEntity.status(500).body(userIds);
   }

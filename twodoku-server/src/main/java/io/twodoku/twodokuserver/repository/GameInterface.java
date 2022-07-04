@@ -24,5 +24,8 @@ public interface GameInterface extends JpaRepository<Game, Integer> {
 
   @Query(value = "SELECT p1_id AS p1_id, p2_id AS p2_id FROM games WHERE id = :id", 
   nativeQuery = true)
-  List<FindUserIds>  findUserIds(@Param("id") int id);
+  FindUserIds  findUserIds(@Param("id") int id);
+
+  @Query(value = "SELECT is_finished FROM games WHERE id = :id")
+  boolean getIs_finished(@Param("id") int id);
 }

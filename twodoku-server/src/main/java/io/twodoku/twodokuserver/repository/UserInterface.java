@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import io.twodoku.twodokuserver.models.userModels.User;
+import io.twodoku.twodokuserver.models.userModels.UserStats;
 
 public interface UserInterface extends JpaRepository<User, Integer> {
   User findByName(String name);
@@ -23,4 +24,8 @@ public interface UserInterface extends JpaRepository<User, Integer> {
   nativeQuery = true)
   @Transactional
   void updateUserIds (@Param("playerId") int playerId);
+
+  @Query(value = "SELECT games_played AS games_played, highest_rating AS highest_rating, rating AS rating, name AS name FROM users WHERE id = :id", 
+  nativeQuery = true)
+  UserStats getUserStats(@Param("id") int id);
 }
