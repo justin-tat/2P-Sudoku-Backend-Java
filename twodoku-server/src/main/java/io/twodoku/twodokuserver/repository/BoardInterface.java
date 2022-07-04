@@ -23,4 +23,5 @@ public interface BoardInterface extends JpaRepository<Board, Integer> {
   value="UPDATE boards SET board_state = :board, player_mistakes = player_mistakes + :mistakes WHERE id = :id")
   @Transactional
   void updateBoardState(@Param("board") String boardState, @Param("mistakes") int mistakes, @Param("id") int id);
+
 }
