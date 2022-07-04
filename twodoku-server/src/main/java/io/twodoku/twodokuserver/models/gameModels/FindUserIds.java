@@ -1,4 +1,4 @@
-package io.twodoku.twodokuserver.models;
+package io.twodoku.twodokuserver.models.gameModels;
 
 public interface FindUserIds {
   public Integer getP1_id();

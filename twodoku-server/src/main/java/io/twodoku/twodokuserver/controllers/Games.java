@@ -29,12 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.graalvm.polyglot.*;
 
 import io.twodoku.twodokuserver.repository.UserInterface;
-import io.twodoku.twodokuserver.models.Board;
 import io.twodoku.twodokuserver.models.BodyParams;
-import io.twodoku.twodokuserver.models.FindUserIds;
-import io.twodoku.twodokuserver.models.Game;
-import io.twodoku.twodokuserver.models.MadeBoard;
-import io.twodoku.twodokuserver.models.PostGameIds;
+import io.twodoku.twodokuserver.models.boardModels.Board;
+import io.twodoku.twodokuserver.models.boardModels.MadeBoard;
+import io.twodoku.twodokuserver.models.gameModels.FindUserIds;
+import io.twodoku.twodokuserver.models.gameModels.Game;
+import io.twodoku.twodokuserver.models.gameModels.PostGameIds;
 import io.twodoku.twodokuserver.repository.BoardInterface;
 import io.twodoku.twodokuserver.repository.GameInterface;
 
@@ -48,7 +48,7 @@ public class Games {
   @Autowired
   BoardInterface boardInterface;
 
-  //Make sure that you are sending boardId after creation for both of the users. See most recent changes in GH
+  //DONE
   @PostMapping(
     value = "/makeGame",
     consumes = {MediaType.APPLICATION_JSON_VALUE},
@@ -90,6 +90,7 @@ public class Games {
     return ResponseEntity.status(200).body(toUsers);
   }
 
+  //DONE
   @GetMapping("/getGame")
   public ResponseEntity getGame(@RequestParam("boardId") int boardId, @RequestParam("userId") int userId) {
     Board board = boardInterface.findById(boardId).get();
@@ -101,6 +102,7 @@ public class Games {
     return ResponseEntity.status(200).body(board);
   }
 
+  //DONE
   @PutMapping(
     value = "/updateGame",
     consumes = {MediaType.APPLICATION_JSON_VALUE},
@@ -111,11 +113,10 @@ public class Games {
     String board = params.get("boardState").toString().replaceAll("\\s+", "");
     HashMap<Integer, Boolean> incorrectTiles = (HashMap<Integer, Boolean>)params.get("incorrectTiles");
     int boardId = Integer.parseInt((String) params.get("boardId"));
-    System.out.println("boardId: " + boardId);
-    System.out.println("board: " + board);
     boardInterface.updateBoardState(board, incorrectTiles.keySet().size(), boardId);
     return ResponseEntity.status(500).body("Successfully updated Game");
   }
+
 
   @PutMapping("/finishGame")
   public ResponseEntity finishGame(@RequestBody BodyParams bodyParams) {
@@ -123,6 +124,7 @@ public class Games {
     int boardId = Integer.parseInt((String) params.get("boardId"));
     int gameId = Integer.parseInt((String) params.get("gameId"));
     List<FindUserIds> userIds = gameInterface.findUserIds(gameId);
+
     return ResponseEntity.status(500).body(userIds);
   }
   

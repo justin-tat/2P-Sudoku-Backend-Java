@@ -3,8 +3,8 @@ package io.twodoku.twodokuserver.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.twodoku.twodokuserver.models.BodyParams;
-import io.twodoku.twodokuserver.models.Game;
-import io.twodoku.twodokuserver.models.User;
+import io.twodoku.twodokuserver.models.gameModels.Game;
+import io.twodoku.twodokuserver.models.userModels.User;
 import io.twodoku.twodokuserver.repository.GameInterface;
 import io.twodoku.twodokuserver.repository.UserInterface;
 

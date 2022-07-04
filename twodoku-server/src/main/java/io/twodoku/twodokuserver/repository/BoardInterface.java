@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import io.twodoku.twodokuserver.models.Board;
-import io.twodoku.twodokuserver.models.MadeBoard;
+import io.twodoku.twodokuserver.models.boardModels.Board;
+import io.twodoku.twodokuserver.models.boardModels.MadeBoard;
 
 public interface BoardInterface extends JpaRepository<Board, Integer> {
   @Modifying

@@ -1,4 +1,4 @@
-package io.twodoku.twodokuserver.models;
+package io.twodoku.twodokuserver.models.gameModels;
 
 import java.time.OffsetDateTime;
 

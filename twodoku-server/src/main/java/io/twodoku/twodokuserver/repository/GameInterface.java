@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import io.twodoku.twodokuserver.models.FindUserIds;
-import io.twodoku.twodokuserver.models.Game;
-import io.twodoku.twodokuserver.models.PostGameIds;
+import io.twodoku.twodokuserver.models.gameModels.FindUserIds;
+import io.twodoku.twodokuserver.models.gameModels.Game;
+import io.twodoku.twodokuserver.models.gameModels.PostGameIds;
 
 public interface GameInterface extends JpaRepository<Game, Integer> {
   //Snake case is reserved in Spring. Instance variable in Game.java converted to camel-case, but still looks for snake-cased column

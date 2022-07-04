@@ -1,4 +1,4 @@
-package io.twodoku.twodokuserver.models;
+package io.twodoku.twodokuserver.models.boardModels;
 
 import java.time.OffsetDateTime;
 
