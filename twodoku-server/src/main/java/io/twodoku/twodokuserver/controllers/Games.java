@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.graalvm.polyglot.*;
 
 import io.twodoku.twodokuserver.repository.UserInterface;
+import io.twodoku.twodokuserver.controllers.eloCalculator.EloRating;
 import io.twodoku.twodokuserver.models.BodyParams;
 import io.twodoku.twodokuserver.models.boardModels.Board;
 import io.twodoku.twodokuserver.models.boardModels.MadeBoard;
@@ -118,22 +119,59 @@ public class Games {
     return ResponseEntity.status(500).body("Successfully updated Game");
   }
 
-
+//Shove String isFinished creation to the top to check if the dbs need to be updated at all before getting anything else. If game has already been decided, you just need to update the asking player's info in users and rating
   @PutMapping("/finishGame")
   public ResponseEntity finishGame(@RequestBody BodyParams bodyParams) {
     HashMap<String, Object> params = bodyParams.getParams();
-    int boardId = Integer.parseInt((String) params.get("boardId"));
     int gameId = Integer.parseInt((String) params.get("gameId"));
-    //pr1
+    String winStatus = gameInterface.getIs_finished(gameId).equals("") ? "You won" : "You lost";
+    int boardId = Integer.parseInt((String) params.get("boardId"));
+    int askingId = Integer.parseInt((String) params.get("userId"));
+    //pr1 userIdsPromise
     FindUserIds userIds = gameInterface.findUserIds(gameId);
-    //pr2
+    //pr2 userStats
     UserStats p1Stats = userInterface.getUserStats(userIds.getP1_id());
     UserStats p2Stats = userInterface.getUserStats(userIds.getP2_id());
-    //pr3
-    boolean isFinished = gameInterface.getIs_finished(gameId);
+    //pr3 arr
+    int askingRating = 0;
+    int waitingRating = 0;
+    String askerName = "";
+    int askerId = 0;
+    int waitingId = 0;
+    if (askingId == userIds.getP1_id()) {
+      askingRating = p1Stats.getRating();
+      askerName = p1Stats.getName();
+      waitingRating = p2Stats.getRating();
+      askerId = userIds.getP1_id();
+      waitingRating = userIds.getP2_id();
+    } else {
+      askingRating = p2Stats.getRating();
+      askerName = p2Stats.getName();
+      waitingRating = p1Stats.getRating();
+      askerId = userIds.getP2_id();
+      waitingRating = userIds.getP1_id();
+    }
+    EloRating elo = new EloRating();
+    int newAskingRating = 0;
+    int newWaitingRating = 0;
     
-
-    return ResponseEntity.status(500).body(userIds);
+    //Update board and gameId when you realize, but update rating when the winner actually wins
+    //Could create an additional column called "trueRating". When somebody wins, change their rating and trueRating to the result of using the elo variable, but only change the trueRating of the waitingPerson. Then, when the loser finds out they've lost, update their rating to the trueRating. This will allow losers who don't know they've lost to still have their old rating when going into their gameHistory.
+    if (winStatus.equals("You lost")) {
+      userInterface.updateUserIds(askerId);
+      newAskingRating = elo.calculate2PlayersRating(askingRating, waitingRating, "-");
+    } else {
+      newAskingRating = elo.calculate2PlayersRating(askingRating, waitingRating, "+");
+      newWaitingRating = elo.calculate2PlayersRating(waitingRating, askingRating, "-");
+      userInterface.updateUserIds(askerId);
+      gameInterface.updateFinishedGame(askerName, gameId);
+      userInterface.updateRating(askerId, newAskingRating);
+      userInterface.updateRating(waitingId, newWaitingRating);
+    }
+    HashMap<String, Object> response = new HashMap<>();
+    response.put("isFinished", winStatus);
+    response.put("newRating", newAskingRating);
+    return ResponseEntity.status(200).body(response);
   }
   
 }

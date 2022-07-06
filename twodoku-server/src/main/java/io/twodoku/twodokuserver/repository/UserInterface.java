@@ -28,4 +28,10 @@ public interface UserInterface extends JpaRepository<User, Integer> {
   @Query(value = "SELECT games_played AS games_played, highest_rating AS highest_rating, rating AS rating, name AS name FROM users WHERE id = :id", 
   nativeQuery = true)
   UserStats getUserStats(@Param("id") int id);
+
+  @Modifying
+  @Query(value = "UPDATE users SET rating = :rating, highest_rating = CASE WHEN $3 > highest_rating THEN :rating ELSE highest_rating END WHERE id = :playerId",
+  nativeQuery = true)
+  @Transactional
+  void updateRating (@Param("playerId") int playerId, @Param("rating") int rating);
 }

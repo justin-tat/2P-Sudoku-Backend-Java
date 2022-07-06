@@ -3,6 +3,8 @@ package io.twodoku.twodokuserver.repository;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,5 +29,10 @@ public interface GameInterface extends JpaRepository<Game, Integer> {
   FindUserIds  findUserIds(@Param("id") int id);
 
   @Query(value = "SELECT is_finished FROM games WHERE id = :id")
-  boolean getIs_finished(@Param("id") int id);
+  String getIs_finished(@Param("id") int id);
+
+  @Modifying
+  @Query(value = "UPDATE games SET is_finished = :winner WHERE id = :gameId")
+  @Transactional
+  void updateFinishedGame(@Param("winner") String winner, @Param("gameId") int gameId);
 }
