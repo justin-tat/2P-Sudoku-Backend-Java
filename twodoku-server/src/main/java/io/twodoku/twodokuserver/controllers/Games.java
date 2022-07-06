@@ -119,7 +119,6 @@ public class Games {
     return ResponseEntity.status(500).body("Successfully updated Game");
   }
 
-//Shove String isFinished creation to the top to check if the dbs need to be updated at all before getting anything else. If game has already been decided, you just need to update the asking player's info in users and rating
   @PutMapping("/finishGame")
   public ResponseEntity finishGame(@RequestBody BodyParams bodyParams) {
     HashMap<String, Object> params = bodyParams.getParams();
