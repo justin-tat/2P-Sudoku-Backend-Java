@@ -28,11 +28,11 @@ public interface GameInterface extends JpaRepository<Game, Integer> {
   nativeQuery = true)
   FindUserIds  findUserIds(@Param("id") int id);
 
-  @Query(value = "SELECT is_finished FROM games WHERE id = :id")
+  @Query(value = "SELECT is_finished FROM games WHERE id = :id", nativeQuery = true)
   String getIs_finished(@Param("id") int id);
 
   @Modifying
-  @Query(value = "UPDATE games SET is_finished = :winner WHERE id = :gameId")
+  @Query(value = "UPDATE games SET is_finished = :winner WHERE id = :gameId", nativeQuery = true)
   @Transactional
   void updateFinishedGame(@Param("winner") String winner, @Param("gameId") int gameId);
 }
