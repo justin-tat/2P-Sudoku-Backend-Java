@@ -1,9 +1,6 @@
 package io.twodoku.twodokuserver.controllers;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -12,7 +9,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.script.*;
 
@@ -26,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.graalvm.polyglot.*;
 
 import io.twodoku.twodokuserver.repository.UserInterface;
 import io.twodoku.twodokuserver.controllers.eloCalculator.EloRating;
@@ -34,7 +29,6 @@ import io.twodoku.twodokuserver.models.BodyParams;
 import io.twodoku.twodokuserver.models.boardModels.Board;
 import io.twodoku.twodokuserver.models.boardModels.MadeBoard;
 import io.twodoku.twodokuserver.models.gameModels.FindUserIds;
-import io.twodoku.twodokuserver.models.gameModels.Game;
 import io.twodoku.twodokuserver.models.gameModels.PostGameIds;
 import io.twodoku.twodokuserver.models.userModels.UserStats;
 import io.twodoku.twodokuserver.repository.BoardInterface;
